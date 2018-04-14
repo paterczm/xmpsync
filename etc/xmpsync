@@ -1,0 +1,3 @@
+#!/bin/sh
+
+java -jar /home/mpatercz/Documents/projects/xmpsync2/target/xmpsync-*-jar-with-dependencies.jar "$@"
