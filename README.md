@@ -1,6 +1,6 @@
 # xmpsync
 
-A command line tool which syncs [XMP](https://en.wikipedia.org/wiki/Extensible_Metadata_Platform) star rating from local JPEG files with photographs in [SmugMug](https://www.smugmug.com/about) photo gallery. Let's you create [smart galleries](http://help.smugmug.com/customer/portal/articles/93308-what-are-smart-galleries-gather-photos-based-on-keywords-) with e.g. best photos from last year.
+A command line tool which syncs [XMP](https://en.wikipedia.org/wiki/Extensible_Metadata_Platform) star rating from local JPEG files with photographs in [SmugMug](https://www.smugmug.com/about) photo gallery. Lets you create [smart galleries](http://help.smugmug.com/customer/portal/articles/93308-what-are-smart-galleries-gather-photos-based-on-keywords-) with e.g. best photos from last year.
 
 SmugMug does not support XMP star rating, so this tool maps it to tags like so:
 
