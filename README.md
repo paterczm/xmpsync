@@ -72,7 +72,7 @@ For convenience, add a [bash script](etc) to your classpath. You can do similar 
 
 ## Configuration
 
-1. First, you need to apply for [SmugMug api key and secret](https://api.smugmug.com/api/developer/apply). Normally this is done by the owner of the application, but, since this is a local command line client, I'm not giving mine away. Their supposed to be secret after all :)
+1. First, you need to apply for [SmugMug api key and secret](https://api.smugmug.com/api/developer/apply). Normally this is done by the owner of the application, but, since this is a local command line client, I'm not giving mine away. They're supposed to be secret after all :)
 2. Once you have the SmugMug api key and secret, configure them with `xmpsync config --smKey <key> --smSecret <secret>`
 3. Last step is to login to your account. It's an interactive process that can be triggered with any command which requires connection to SmugMug, e.g.:
 
