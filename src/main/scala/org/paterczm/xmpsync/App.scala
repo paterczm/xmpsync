@@ -93,14 +93,6 @@ object App extends App {
 								case _ => throw new Exception(s"""Could not find albumId=${config.id}""")
 							}
 						}
-						case "linkFolder" => {
-
-							// TODO: fetch folder
-							ConfigFactory.parseFile(new File(conf.folderConfFileName))
-								.withValue("Folder.SM.FolderKey", ConfigValueFactory.fromAnyRef(config.id))
-								.save(new File("folder.conf"))
-
-						}
 						case "rate" => {
 
 							val imageSearchScope = new File(conf.albumConfFileName).exists() match {

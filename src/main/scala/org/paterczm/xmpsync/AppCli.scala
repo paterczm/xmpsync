@@ -47,13 +47,6 @@ object AppCli {
 					.action((str, config) =>
 						config.copy(id = str)))
 
-		cmd("linkFolder").action((_, config) => config.copy(action = "linkFolder"))
-			.text("Link current directory to specified folder.")
-			.children(
-				opt[String]('i', "id").required().valueName("<folder id>")
-					.action((str, config) =>
-						config.copy(id = str)))
-
 		cmd("rate").action((_, config) => config.copy(action = "rate"))
 			.text("Rate images in a linked album")
 			.children(
