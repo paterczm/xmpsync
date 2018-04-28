@@ -2,8 +2,8 @@ package org.paterczm.xmpsync
 
 object AppCli {
 
-	case class Cli(smKey: String, smSecret: String, action: String, query: String, id: String, dryRun: Boolean = false, home: Option[String] = None, debug: Boolean = false, threads: Option[Int] = None, pageSize: Int = 50) {
-		def this() = this(null, null, null, null, null)
+	case class Cli(smKey: String, smSecret: String, action: String, query: String, id: String, folderPath: String, dryRun: Boolean = false, home: Option[String] = None, debug: Boolean = false, threads: Option[Int] = None, pageSize: Int = 50) {
+		def this() = this(null, null, null, null, null, null)
 	}
 
 	// -DFolder.SM.FolderKey=foo should work as override
@@ -61,11 +61,14 @@ object AppCli {
 					.action((t, config) => config.copy(threads = Some(t))),
 
 				opt[Int]('p', "pageSize").optional().valueName("<page size>")
-					.action((p, config) => config.copy(pageSize = p)))
+					.action((p, config) => config.copy(pageSize = p)),
+
+				opt[String]('f', "folderPath").optional().valueName("<folder path>")
+					.action((f, config) => config.copy(folderPath = f)))
 
 		// TODO: can't I just make command required?
 		checkConfig { conf => conf match {
-			case Cli(_,_,null, _, _, _, _, _, _, _) => failure("Command required")
+			case Cli(_,_,null, _, _, _, _, _, _, _, _) => failure("Command required")
 			case _ => success
 		}}
 

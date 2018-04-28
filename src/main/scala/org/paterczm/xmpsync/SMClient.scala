@@ -28,7 +28,7 @@ object SMClient {
 	object SMScope {
 		def user(username: String): SMScope = SMScope(s"""/api/v2/user/$username""")
 		def album(albumKey: String): SMScope = SMScope(s"""/api/v2/album/$albumKey""")
-		def folder(folderKey: String): SMScope = SMScope(s"""/api/v2/folder/id/$folderKey""")
+		def folder(username: String, folderPath: String): SMScope = SMScope(s"""/api/v2/folder/user/$username/$folderPath""")
 	}
 
 }
