@@ -2,8 +2,8 @@ package org.paterczm.xmpsync
 
 object AppCli {
 
-	case class Cli(smKey: String, smSecret: String, action: String, query: String, id: String, folderPath: String, dryRun: Boolean = false, home: Option[String] = None, debug: Boolean = false, threads: Option[Int] = None, pageSize: Int = 50) {
-		def this() = this(null, null, null, null, null, null)
+	case class Cli(smKey: String, smSecret: String, action: String, query: String, id: String, folderPath: Option[String]=None, dryRun: Boolean = false, home: Option[String] = None, debug: Boolean = false, threads: Option[Int] = None, pageSize: Int = 50) {
+		def this() = this(null, null, null, null, null)
 	}
 
 	// -DFolder.SM.FolderKey=foo should work as override
@@ -57,7 +57,7 @@ object AppCli {
 					.action((p, config) => config.copy(pageSize = p)),
 
 				opt[String]('f', "folderPath").optional().valueName("<folder path>")
-					.action((f, config) => config.copy(folderPath = f)))
+					.action((f, config) => config.copy(folderPath = Some(f))))
 
 		// TODO: can't I just make command required?
 		checkConfig { conf => conf match {

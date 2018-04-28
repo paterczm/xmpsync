@@ -97,7 +97,7 @@ object App extends App {
 
 							val imageSearchScope = new File(conf.albumConfFileName).exists() match {
 								case true => SMScope.album(ConfigFactory.parseFile(new File(conf.albumConfFileName)).albumSMAlbumKey.value)
-								case false => SMScope.folder(username, config.folderPath)
+								case false => SMScope.folder(username, config.folderPath.getOrElse(throw new IllegalArgumentException("folderPath is required!")))
 							}
 
 							logger.debug(s"""Rating $imageSearchScope""")
