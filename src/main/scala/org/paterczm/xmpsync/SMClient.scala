@@ -113,7 +113,7 @@ class SMClient(val auth: SMAuthentication, val api: SMApi) {
 	}
 
 	def updateImageKeywords(image: SMImage) {
-		val uri = s"""/api/v2/image/${image.ImageKey}"""
+		val uri = s"""/api/v2/image/${image.ImageKey}-0"""
 
 		patch(uri, s"""{"Keywords": "${image.KeywordArray.mkString(",")}"}""")
 	}
