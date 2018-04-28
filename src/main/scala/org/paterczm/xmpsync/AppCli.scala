@@ -2,7 +2,7 @@ package org.paterczm.xmpsync
 
 object AppCli {
 
-	case class Cli(smKey: String, smSecret: String, action: String, query: String, id: String, albumId: String, folderId: String, dryRun: Boolean = false, home: Option[String] = None, debug: Boolean = false, threads: Option[Int] = None, pageSize: Int = 50) {
+	case class Cli(smKey: String, smSecret: String, action: String, query: String, id: String, dryRun: Boolean = false, home: Option[String] = None, debug: Boolean = false, threads: Option[Int] = None, pageSize: Int = 50) {
 		def this() = this(null, null, null, null, null)
 	}
 
@@ -61,17 +61,11 @@ object AppCli {
 					.action((t, config) => config.copy(threads = Some(t))),
 
 				opt[Int]('p', "pageSize").optional().valueName("<page size>")
-					.action((p, config) => config.copy(pageSize = p)),
-
-				opt[String]('a', "albumId").required().valueName("<album id>")
-					.action((str, config) => config.copy(albumId = str)),
-
-				opt[String]('f', "folderId").required().valueName("<folder id>")
-					.action((str, config) => config.copy(folderId = str)))
+					.action((p, config) => config.copy(pageSize = p)))
 
 		// TODO: can't I just make command required?
 		checkConfig { conf => conf match {
-			case Cli(_,_,null, _, _, _, _, _, _, _, _, _) => failure("Command required")
+			case Cli(_,_,null, _, _, _, _, _, _, _) => failure("Command required")
 			case _ => success
 		}}
 
