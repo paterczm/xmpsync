@@ -14,17 +14,17 @@ case class SMRating(rating: Int) {
 	}
 }
 
-case class SMImage(Title: Option[String], Caption: Option[String], WebUri: String, KeywordArray: List[String], FileName: String, ImageKey: String, OriginalSize: Long) {
+case class SMImage(Title: Option[String], Caption: Option[String], WebUri: String, KeywordArray: List[String], FileName: String, ImageKey: String) {
 
 	def trueKeywords = KeywordArray.filter(!_.startsWith("rating")).toSet
 
 	def rate(rating: SMRating): SMImage = {
 		val ratedTags = trueKeywords ++ rating.asTags
 
-		SMImage(Title, Caption, WebUri, ratedTags.toList.sorted, FileName, ImageKey, OriginalSize)
+		SMImage(Title, Caption, WebUri, ratedTags.toList.sorted, FileName, ImageKey)
 	}
 
-	def keywords(tags: Set[String]) = SMImage(Title, Caption, WebUri, tags.toList.sorted, FileName, ImageKey, OriginalSize)
+	def keywords(tags: Set[String]) = SMImage(Title, Caption, WebUri, tags.toList.sorted, FileName, ImageKey)
 
 	def keywords = KeywordArray.toSet
 
@@ -39,8 +39,7 @@ object SMImage {
 		(JsPath \ "WebUri").read[String] and
 		(JsPath \ "KeywordArray").read[List[String]] and
 		(JsPath \ "FileName").read[String] and
-		(JsPath \ "ImageKey").read[String] and
-		(JsPath \ "OriginalSize").read[Long])(SMImage.apply _)
+		(JsPath \ "ImageKey").read[String])(SMImage.apply _)
 
 	def unapply(jsonResponse: JsDefined): Option[List[SMImage]] = {
 		(jsonResponse \ resultName).asOpt[List[SMImage]]

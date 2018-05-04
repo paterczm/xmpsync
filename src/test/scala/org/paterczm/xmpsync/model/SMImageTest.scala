@@ -5,7 +5,7 @@ import org.junit.Assert._
 
 class SMImageTest {
 
-	val image = SMImage(Some("title"), Some("caption"), "uri", List("foo", "bar", "rating2", "ratingAtLeast2"), "file", "key", 10l)
+	val image = SMImage(Some("title"), Some("caption"), "uri", List("foo", "bar", "rating2", "ratingAtLeast2"), "file", "key")
 
 	@Test
 	def ratingTest {

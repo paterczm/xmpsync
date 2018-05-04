@@ -11,15 +11,11 @@ import scalaz.Forall
 
 class SMXmpLookup(localImages: Map[String, List[LocalImage]]) {
 
-	private def matchBySize(localImage: LocalImage, remoteImage: SMImage) = localImage.file.length() == remoteImage.OriginalSize
-
 	private def matchByDescription(localImage: LocalImage, remoteImage: SMImage) = equalStrOptions(localImage.xmp.description, remoteImage.Caption)
 
 	private def matchByDateTaken(localImage: LocalImage, remoteImageMetadata: SMImageMetadata) = localImage.xmp.dateTimeOriginal != None && localImage.xmp.dateTimeOriginal == Some(LocalDateTime.parse(remoteImageMetadata.DateDigitized, XMP.dateFormatter))
 
 	private def matchLocalByRatingAndTags(xmp1: XMP, xmp2: XMP) = xmp1.rating == xmp2.rating && xmp1.tags == xmp2.tags
-
-	private def fuzzyMatch(localImage: LocalImage, remoteImage: SMImage) = matchBySize(localImage, remoteImage) || matchByDescription(localImage, remoteImage)
 
 	private def onlyDuplicates(localImages: List[LocalImage]) = {
 

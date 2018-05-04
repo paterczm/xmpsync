@@ -11,7 +11,7 @@ class SMXmpSyncProcessor(localImages: SMXmpLookup, smClient: SMClient, scope: SM
 
 	val logger = LoggerFactory.getLogger(this.getClass);
 
-	def totalInScope() = smClient.searchImages(scope, 1, 0).Pages.Total
+	def totalInScope() = smClient.searchImages(scope, 1, 1).Pages.Total
 
 	// thread safe
 	def rate(from: Int, to: Int): XmpSyncResult = {

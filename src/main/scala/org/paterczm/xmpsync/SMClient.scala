@@ -47,7 +47,7 @@ class SMClient(val auth: SMAuthentication, val api: SMApi) {
 
 	val consumer = new DefaultConsumerService(ExecutionContext.global)
 
-	private def call(uri: String, method: String, body: Option[String]): String = {
+	private def call(uri: String, method: String, body: Option[String], redirectCount:Int = 0): String = {
 		val url = s"""$apiUrl$uri"""
 
 		val req = body match {
@@ -61,11 +61,24 @@ class SMClient(val auth: SMAuthentication, val api: SMApi) {
 
 		logger.debug(s"""resp=${resp}""")
 
-		if (!resp.is2xx && !resp.is3xx) {
-			throw new Exception("HTTP Status=" + resp.statusLine)
-		}
+		if (resp.is3xx) {
 
-		resp.body
+			if (redirectCount > 3) {
+				throw new Exception(s"Too many redirects! HTTP Status=${resp.statusLine},\nrequest=${req}\nresponse=${resp}")
+			}
+
+			val redirectLocation = resp.header("Location").get
+			logger.debug(s"Redirecting from $url to $redirectLocation")
+
+			call(redirectLocation, method, body, redirectCount+1)
+
+			return resp.body
+
+		} else if (resp.is2xx) {
+			return resp.body
+		} else {
+			throw new Exception(s"HTTP Status=${resp.statusLine},\nrequest=${req}\nresponse=${resp}")
+		}
 	}
 
 	private def get(uri: String) = call(uri, "GET", None)
@@ -101,7 +114,8 @@ class SMClient(val auth: SMAuthentication, val api: SMApi) {
 	}
 
 	def searchImages(scope: SMScope, start: Int = 1, pageSize: Int = 10): SMImagesResponse = {
-		val uri = s"""/api/v2/image!search?Scope=${scope.uri}&SortDirection=Descending&SortMethod=DateTaken&_verbosity=0&_pretty=${pretty}&start=${start}&count=${pageSize}&_filter=Title,Caption,WebUri,KeywordArray,FileName,ImageKey,OriginalSize&_filteruri="""
+		// removed &SortDirection=Descending&SortMethod=DateTaken, because it results in 404 for some images (?)
+		val uri = s"""/api/v2/image!search?Scope=${scope.uri}&_verbosity=0&_pretty=${pretty}&start=${start}&count=${pageSize}&_filter=Title,Caption,WebUri,KeywordArray,FileName,ImageKey&_filteruri="""
 
 		SMImagesResponse(Json.parse(get(uri)))
 	}
@@ -113,7 +127,7 @@ class SMClient(val auth: SMAuthentication, val api: SMApi) {
 	}
 
 	def updateImageKeywords(image: SMImage) {
-		val uri = s"""/api/v2/image/${image.ImageKey}-0"""
+		val uri = s"""/api/v2/image/${image.ImageKey}"""
 
 		patch(uri, s"""{"Keywords": "${image.KeywordArray.mkString(",")}"}""")
 	}

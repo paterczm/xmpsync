@@ -38,7 +38,7 @@ class SMXmpLookupTest extends FlatSpec with Matchers {
 
 	class MockXMP(rating: Option[Int] = None, dateTimeOriginal: Option[LocalDateTime]) extends XMP(title = None, description = None, rating = rating, dateTimeOriginal = dateTimeOriginal)
 
-	class MockImage(fileName: String) extends SMImage(Title = None, Caption = None, WebUri = null, KeywordArray = null, FileName = fileName, ImageKey = null, OriginalSize = 13)
+	class MockImage(fileName: String) extends SMImage(Title = None, Caption = None, WebUri = null, KeywordArray = null, FileName = fileName, ImageKey = null)
 
 	val localImages: Map[String, List[LocalImage]] = Map(
 		"dfc01" -> List(
