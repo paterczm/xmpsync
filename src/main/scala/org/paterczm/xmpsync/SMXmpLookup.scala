@@ -15,13 +15,13 @@ class SMXmpLookup(localImages: Map[String, List[LocalImage]]) {
 
 	private def matchByDateTaken(localImage: LocalImage, remoteImageMetadata: SMImageMetadata) = localImage.xmp.dateTimeOriginal != None && localImage.xmp.dateTimeOriginal == Some(LocalDateTime.parse(remoteImageMetadata.DateDigitized, XMP.dateFormatter))
 
-	private def matchLocalByRatingAndTags(xmp1: XMP, xmp2: XMP) = xmp1.rating == xmp2.rating && xmp1.tags == xmp2.tags
+	private def matchLocalByRating(xmp1: XMP, xmp2: XMP) = xmp1.rating == xmp2.rating
 
-	private def onlyDuplicates(localImages: List[LocalImage]) = {
+	private def sameRatingOrOnlyOneRated(localImages: List[LocalImage]) = {
 
 		val xmps = localImages.map(_.xmp)
 
-		xmps.forall(matchLocalByRatingAndTags(xmps(0), _))
+		xmps.forall(matchLocalByRating(xmps(0), _)) || xmps.filter(_.rating != None).size == 1
 	}
 
 	private def createMultilineStringOfLocalImages(list: List[LocalImage]) = {
@@ -43,8 +43,8 @@ class SMXmpLookup(localImages: Map[String, List[LocalImage]]) {
 			case matchedByDateTaken: List[LocalImage] if matchedByDateTaken.size > 1 => {
 				logger.debug(s"${matchedByDateTaken.size} local image(s) matched by date taken")
 
-				if (onlyDuplicates(matchedByDateTaken)) {
-					logger.debug("All matched images are the same, so returning the first one")
+				if (sameRatingOrOnlyOneRated(matchedByDateTaken)) {
+					logger.debug("All matched images are the same as far as rating is concerned, so choosing one")
 					return Some(matchedByDateTaken(0).xmp)
 				}
 

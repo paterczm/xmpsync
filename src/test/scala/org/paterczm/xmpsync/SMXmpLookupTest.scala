@@ -48,7 +48,10 @@ class SMXmpLookupTest extends FlatSpec with Matchers {
 		"dfc02" -> List(
 			LocalImage(new MockFile(2), () => new MockXMP(dateTimeOriginal = "2018-01-01T09:12:01".asSomeDate(), rating = Some(2))),
 			LocalImage(new MockFile(2), () => new MockXMP(dateTimeOriginal = "2018-01-01T09:12:01".asSomeDate(), rating = Some(2))),
-			LocalImage(new MockFile(2), () => new MockXMP(dateTimeOriginal = "2017-01-01T09:12:01".asSomeDate(), rating = Some(2)))))
+			LocalImage(new MockFile(2), () => new MockXMP(dateTimeOriginal = "2017-01-01T09:12:01".asSomeDate(), rating = Some(2)))),
+		"dfc03" -> List(
+			LocalImage(new MockFile(2), () => new MockXMP(dateTimeOriginal = "2018-01-01T09:12:01".asSomeDate(), rating = Some(2))),
+			LocalImage(new MockFile(2), () => new MockXMP(dateTimeOriginal = "2018-01-01T09:12:01".asSomeDate(), rating = None))))
 
 	val smXmpLookup = new SMXmpLookup(localImages)
 
@@ -60,7 +63,7 @@ class SMXmpLookupTest extends FlatSpec with Matchers {
 		smXmpLookup.lookup(new MockImage("DFC01"), SMImageMetadata("2017-01-01T09:12:01")) should be(None)
 	}
 
-	it should "return None when there are 2 images matching by filename and date taken" in {
+	it should "return None when there are 2 images matching by filename and date taken but different rating" in {
 		smXmpLookup.lookup(new MockImage("DFC01"), SMImageMetadata("2018-01-01T09:12:01")) should be(None)
 	}
 
@@ -68,8 +71,12 @@ class SMXmpLookupTest extends FlatSpec with Matchers {
 		smXmpLookup.lookup(new MockImage("DFC01"), SMImageMetadata("2018-02-02T09:12:01")) should be(Some(localImages("dfc01")(2).xmp))
 	}
 
-	it should "return first matching image when 2 images are matching but have the same rating and tags" in {
-		smXmpLookup.lookup(new MockImage("DFC01"), SMImageMetadata("2018-02-02T09:12:01")) should be(Some(localImages("dfc01")(2).xmp))
+	it should "return first matching image when 2 images are matching but have the same rating" in {
+		smXmpLookup.lookup(new MockImage("DFC02"), SMImageMetadata("2018-01-01T09:12:01")) should be(Some(localImages("dfc02")(0).xmp))
+	}
+
+	it should "return rated image if multiple are matching but only one is rated" in {
+		smXmpLookup.lookup(new MockImage("DFC03"), SMImageMetadata("2018-01-01T09:12:01")) should be(Some(localImages("dfc03")(0).xmp))
 	}
 
 }
