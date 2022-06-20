@@ -70,9 +70,7 @@ class SMClient(val auth: SMAuthentication, val api: SMApi) {
 			val redirectLocation = resp.header("Location").get
 			logger.debug(s"Redirecting from $url to $redirectLocation")
 
-			call(redirectLocation, method, body, redirectCount+1)
-
-			return resp.body
+			return call(redirectLocation, method, body, redirectCount+1)
 
 		} else if (resp.is2xx) {
 			return resp.body
