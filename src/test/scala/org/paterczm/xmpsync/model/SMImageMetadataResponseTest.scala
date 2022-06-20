@@ -7,17 +7,17 @@ import org.junit.Test
 import org.junit.Assert
 import play.api.libs.json.Json
 
-class SMImagesResponseTest {
+class SMImageMetadataResponseTest {
 
-	val responsePath = "./src/test/resources/smugmug/searchImagesResponse.json"
+	val responsePath = "./src/test/resources/smugmug/imageMetadataResponse.json"
 
 	var responseText: String = _
 
 	@Before
 	def setUp() {
 		val stream = new FileInputStream(responsePath)
-		responseText = Source.fromInputStream(stream).mkString
-		stream.close()
+    	responseText = Source.fromInputStream(stream).mkString
+    	stream.close()
 	}
 
 	@Test
@@ -25,9 +25,9 @@ class SMImagesResponseTest {
 
 		val json = Json.parse(responseText)
 
-		val response = SMImagesResponse(json)
+		val response = SMImageMetadataResponse(json)
 
-		Assert.assertEquals(5, response.Image.size)
+		Assert.assertEquals("2022-05-08T13:35:55-04:00", response.ImageMetadata.DateDigitized)
 
 	}
 
